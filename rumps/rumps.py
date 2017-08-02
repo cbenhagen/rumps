@@ -191,11 +191,12 @@ def _nsimage_from_file(filename, dimensions=None, template=None):
         _log('attempting to open image at {0}'.format(filename))
         with open(filename):
             pass
-    except IOError:  # literal file path didn't work -- try to locate image based on main script path
+    except IOError:
+        # literal file path didn't work -- try to locate image based on PyInstaller ressources path and main script path
         try:
             from __main__ import __file__ as main_script_path
-            main_script_path = os.path.dirname(main_script_path)
-            filename = os.path.join(main_script_path, filename)
+            base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(main_script_path)))
+            filename = os.path.join(base_path, filename)
         except ImportError:
             pass
         _log('attempting (again) to open image at {0}'.format(filename))
