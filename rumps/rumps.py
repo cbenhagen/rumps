@@ -157,7 +157,9 @@ def notification(title, subtitle, message, data=None, sound=True):
     notification.setTitle_(title)
     notification.setSubtitle_(subtitle)
     notification.setInformativeText_(message)
-    notification.setUserInfo_({} if data is None else data)
+    # FIXME: uncomment as soon as pyobjc supports secure encoding:
+    # https://bitbucket.org/ronaldoussoren/pyobjc/issues/180
+    # notification.setUserInfo_({} if data is None else data)
     if sound:
         notification.setSoundName_("NSUserNotificationDefaultSoundName")
     notification.setDeliveryDate_(NSDate.dateWithTimeInterval_sinceDate_(0, NSDate.date()))
@@ -916,6 +918,10 @@ class NSApp(NSObject):
     _ns_to_py_and_callback = {}
 
     def userNotificationCenter_didActivateNotification_(self, notification_center, notification):
+        # FIXME: reactivate method as soon as pyobjc supports secure encoding:
+        # https://bitbucket.org/ronaldoussoren/pyobjc/issues/180
+        return
+
         notification_center.removeDeliveredNotification_(notification)
         data = dict(notification.userInfo())
         try:
